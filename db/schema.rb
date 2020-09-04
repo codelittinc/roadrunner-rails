@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_03_234304) do
+ActiveRecord::Schema.define(version: 2020_09_04_192423) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,9 +33,6 @@ ActiveRecord::Schema.define(version: 2020_09_03_234304) do
     t.index ["pull_request_id"], name: "index_commits_on_pull_request_id"
   end
 
-  create_table "data_migrations", primary_key: "version", id: :string, force: :cascade do |t|
-  end
-
   create_table "flow_requests", force: :cascade do |t|
     t.string "json"
     t.string "flow_name"
@@ -54,6 +51,14 @@ ActiveRecord::Schema.define(version: 2020_09_03_234304) do
     t.index ["slug", "sluggable_type", "scope"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type_and_scope", unique: true
     t.index ["slug", "sluggable_type"], name: "index_friendly_id_slugs_on_slug_and_sluggable_type"
     t.index ["sluggable_type", "sluggable_id"], name: "index_friendly_id_slugs_on_sluggable_type_and_sluggable_id"
+  end
+
+  create_table "github_authentications", force: :cascade do |t|
+    t.string "access_token"
+    t.string "refresh_token"
+    t.integer "refresh_token_expires_in"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "projects", force: :cascade do |t|

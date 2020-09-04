@@ -6,6 +6,11 @@ Rails.application.routes.draw do
   get 'incidents', to: 'incidents#index'
   post 'flows', to: 'flow#create'
 
+  namespace 'authentication' do
+    post 'github', to: 'github#create'
+    get 'github', to: 'github#index'
+  end
+
   resources :servers
   resources :open_pull_requests, only: :index
   resources :server_incidents_report, only: :show

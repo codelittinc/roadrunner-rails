@@ -1,0 +1,2 @@
+class GithubAuthentication < ApplicationRecord
+end

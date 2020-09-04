@@ -3,8 +3,8 @@
 module Clients
   module Github
     class GithubBase
-      def initialize
-        @client = Octokit::Client.new(access_token: ENV['GIT_AUTH_KEY'])
+      def initialize(access_token)
+        @client = Octokit::Client.new(access_token: GithubAuthentication.last.access_token)
       end
     end
   end
