@@ -44,8 +44,8 @@ module Flows
         base: parser.base,
         title: parser.title,
         description: parser.description,
-        repository: repository,
-        user: user
+        repository:,
+        user:
       )
 
       pr.source = parser.build_source(pr)
@@ -60,13 +60,13 @@ module Flows
     def branch
       return @branch if @branch
 
-      @branch = Branch.where(name: @current_pull_request.head, repository: repository).first_or_create
+      @branch = Branch.where(name: @current_pull_request.head, repository:).first_or_create
       @branch.update(pull_request: @current_pull_request)
       @branch
     end
 
     def checkrun
-      @checkrun ||= CheckRun.where(branch: branch).last
+      @checkrun ||= CheckRun.where(branch:).last
     end
 
     def checkrun_state

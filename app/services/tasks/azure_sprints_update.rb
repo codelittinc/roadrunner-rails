@@ -41,7 +41,7 @@ module Tasks
             start_date: Date.parse(sprint.start_date),
             end_date: Date.parse(sprint.end_date),
             name: sprint.name, time_frame: sprint.time_frame,
-            team: team, customer: customer
+            team:, customer:
           )
           sprint_obj.save!
           Clients::Azure::Sprint.new.work_items(team, sprint.id).each do |issue|
@@ -52,7 +52,7 @@ module Tasks
               story_type: issue.story_type,
               state: issue.state,
               title: issue.title,
-              user: user,
+              user:,
               sprint: sprint_obj,
               story_points: issue.story_points,
               tags: issue.tags

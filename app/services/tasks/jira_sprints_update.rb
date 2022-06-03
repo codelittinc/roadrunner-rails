@@ -47,7 +47,7 @@ module Tasks
               story_type: fields.dig('issuetype', 'name'),
               state: fields.dig('status', 'name'),
               title: fields['summary'],
-              user: user,
+              user:,
               sprint: sprint_obj,
               story_points: fields['customfield_10023']&.to_f,
               tags: fields['customfield_10033']&.join(', ')
