@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_10_22_151045) do
+ActiveRecord::Schema[7.0].define(version: 2022_10_23_180544) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -206,7 +206,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_151045) do
     t.string "owner"
     t.string "friendly_name"
     t.string "source_control_type"
+    t.bigint "organization_id"
     t.index ["friendly_name"], name: "index_repositories_on_friendly_name", unique: true
+    t.index ["organization_id"], name: "index_repositories_on_organization_id"
     t.index ["project_id"], name: "index_repositories_on_project_id"
   end
 
@@ -321,6 +323,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_10_22_151045) do
   add_foreign_key "pull_requests", "repositories"
   add_foreign_key "pull_requests", "users"
   add_foreign_key "releases", "applications"
+  add_foreign_key "repositories", "organizations"
   add_foreign_key "server_incident_instances", "server_incidents"
   add_foreign_key "servers", "applications"
   add_foreign_key "slack_repository_infos", "repositories"

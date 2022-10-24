@@ -1,10 +1,10 @@
-<%= form_with(model: repository) do |form| %>
-  <% if repository.errors.any? %>
+<%= form_with url: "/organizanizations/#{organization_repository.id}/repositories" do |form| %>
+  <% if organization_repository.errors.any? %>
     <div style="color: red">
-     <h2><%= pluralize(repository.errors.count, "error") %> prohibited this repository from being saved:</h2>
+     <h2><%= pluralize(organization_repository.errors.count, "error") %> prohibited this repository from being saved:</h2>
 
       <ul>
-        <% repository.errors.each do |error| %>
+        <% organization_repository.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
@@ -17,7 +17,7 @@
 
   <div>
     <%= form.label :name, "Project" %>
-    <%= form.select :project_id, Project.all.pluck(:name, :id),  selected: repository.project&.id %>
+    <%= form.select :project_id, Project.all.pluck(:name, :id),  selected: organization_repository.project&.id %>
   </div>
 
   <%= form.label :friendly_name, "Friendly name:" %>
@@ -51,26 +51,26 @@
 <div>
  <%= form.fields_for :slack_repository_info_attributes do |f|%>
    <%= f.label :deploy_channel, "deploy channel:" %>
-   <%= f.text_field :deploy_channel, value: repository.slack_repository_info&.deploy_channel %>
+   <%= f.text_field :deploy_channel, value: organization_repository.slack_repository_info&.deploy_channel %>
 
    <%= f.label :deploy_channel, "dev channel:" %>
-   <%= f.text_field :dev_channel, value: repository.slack_repository_info&.dev_channel %>
+   <%= f.text_field :dev_channel, value: organization_repository.slack_repository_info&.dev_channel %>
 
    <%= f.label :dev_group, "dev group:" %>
-   <%= f.text_field :dev_group, value: repository.slack_repository_info&.dev_group %>
+   <%= f.text_field :dev_group, value: organization_repository.slack_repository_info&.dev_group %>
 
    <%= f.label :feed_channel, "feed channel:" %>
-   <%= f.text_field :feed_channel, value: repository.slack_repository_info&.feed_channel %>
+   <%= f.text_field :feed_channel, value: organization_repository.slack_repository_info&.feed_channel %>
  <% end %>
 </div>
 
-  <% if repository.id? %>
+  <% if organization_repository.id? %>
     <div>
       <%= link_to 'Add Application', 'applications/new', class: 'waves-effect waves-light btn btn-small blue' %>
     </div>
   <% end %>
 
-  <% if repository.applications.present? %>
+  <% if organization_repository.applications.present? %>
     <div>  
       <%= render "applications/table", repository: @repository %>  
     </div>

@@ -34,3 +34,4 @@
 .env.*
 latest.dump
 .DS_STORE
+*.pem
