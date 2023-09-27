@@ -25,9 +25,9 @@ class Repository < ApplicationRecord
   belongs_to :project, optional: true
   has_one :slack_repository_info, dependent: :destroy
 
-  has_many :pull_requests
-  has_many :branches
-  has_many :applications
+  has_many :pull_requests, dependent: :destroy
+  has_many :branches, dependent: :destroy
+  has_many :applications, dependent: :destroy
 
   accepts_nested_attributes_for :slack_repository_info
 
