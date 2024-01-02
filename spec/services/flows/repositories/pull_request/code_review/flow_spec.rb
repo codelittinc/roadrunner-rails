@@ -4,7 +4,7 @@ require 'rails_helper'
 require 'external_api_helper'
 require 'flows_helper'
 
-RSpec.describe Flows::NewChangePullRequestCodeFlow, type: :service do
+RSpec.describe Flows::Repositories::PullRequest::CodeReview::Flow, type: :service do
   context 'Github JSON' do
     let(:valid_json) { load_flow_fixture('github_change_pull_request.json') }
     let(:closed_pr_json) { load_flow_fixture('github_close_pull_request.json') }
