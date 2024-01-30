@@ -28,7 +28,7 @@ module Flows
     end
 
     def flow?
-      return unless can_parse?
+      return false unless can_parse?
 
       parse_data!
       can_execute?

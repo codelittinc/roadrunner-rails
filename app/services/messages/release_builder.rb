@@ -7,7 +7,7 @@ module Messages
       changes = ChangelogsService.changes(commits)
 
       changelog = changes.map do |change|
-        base = " - #{change[:message].lines.first.gsub(/\n/, '').gsub('\n', '')}"
+        base = " - #{change[:message].lines.first.gsub("\n", '').gsub('\n', '')}"
         task_manager_references = change[:references][:task_manager]
 
         links = task_manager_references.map do |reference|

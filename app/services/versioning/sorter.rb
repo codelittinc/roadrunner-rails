@@ -9,7 +9,8 @@ module Versioning
     def sort
       return @list if @list.empty?
       return sort_tag_names(@list) if @list.first.is_a?(String)
-      return sort_releases(@list) if @list.first.is_a?(Clients::Azure::Parsers::ReleaseParser)
+
+      sort_releases(@list) if @list.first.is_a?(Clients::Azure::Parsers::ReleaseParser)
     end
 
     private

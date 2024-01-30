@@ -24,9 +24,9 @@ module Flows
           end
 
           def can_execute?
-            return if repository.nil?
-            return unless pull_request.nil?
-            return unless parser.new_pull_request_flow?
+            return false if repository.nil?
+            return false unless pull_request.nil?
+            return false unless parser.new_pull_request_flow?
 
             !parser.draft && !repository.deployment_branches?(parser.base, parser.head) && repository.valid_base_branch_for_pull_request?(parser.base)
           end

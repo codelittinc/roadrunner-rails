@@ -1,4 +1,4 @@
-FROM ruby:3.2.0-bullseye as development
+FROM ruby:3.3.0-bullseye as development
 
 RUN echo "Running Dockerfile with the environment: DEVELOPMENT"
 

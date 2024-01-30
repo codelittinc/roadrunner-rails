@@ -19,7 +19,8 @@ module Tasks
 
     def source_control_client(pull_request)
       return Clients::Azure::PullRequest if pull_request.source_type == 'AzurePullRequest'
-      return Clients::Github::PullRequest if pull_request.source_type == 'GithubPullRequest'
+
+      Clients::Github::PullRequest if pull_request.source_type == 'GithubPullRequest'
     end
   end
 end
