@@ -38,7 +38,17 @@ module Flows
           end
 
           def user
-            @user ||= Clients::Backstage::User.new.list(parser.user_identifier).first
+            return @user if @user
+
+            # The creation will only work for Azure because it is the only one we have the email,
+            # we might need to revert this later on
+            @user = Clients::Backstage::User.new.find_or_create_by([parser.user_identifier, parser.email],
+                                                                   {
+                                                                     email: parser.email,
+                                                                     first_name: parser.first_name,
+                                                                     last_name: parser.last_name,
+                                                                     internal: false
+                                                                   })
           end
 
           def slack_message

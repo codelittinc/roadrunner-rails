@@ -11,7 +11,10 @@ module Flows
                       :source_control_id,
                       :mention_regex,
                       :user_identifier,
-                      :review_state
+                      :review_state,
+                      :first_name,
+                      :last_name,
+                      :email
 
           def can_parse?
             @json[:eventType] == 'ms.vss-code.git-pullrequest-comment-event'
@@ -25,6 +28,9 @@ module Flows
 
             @review_comment = @json.dig(:resource, :comment, :content)
             @user_identifier = @json.dig(:resource, :comment, :author, :uniqueName)
+            @email = @user_identifier
+            display_name = @json.dig(:resource, :comment, :author, :displayName)
+            @first_name, @last_name = display_name.split
             @review_state = 'commented'
           end
         end

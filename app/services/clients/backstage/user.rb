@@ -23,6 +23,15 @@ module Clients
         response = Request.get("#{@url}/users?query=#{query_string}", authorization)
         response.map { |user| BackstageUser.new(user) }
       end
+
+      def create(body)
+        response = Request.post("#{@url}/users", authorization, body)
+        BackstageUser.new(JSON.parse(response.body))
+      end
+
+      def find_or_create_by(query, body)
+        list(query).first || create(body)
+      end
     end
   end
 end

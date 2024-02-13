@@ -8,8 +8,7 @@ RSpec.describe Flows::Repositories::PullRequest::CodeReview::Flow, type: :servic
   before do
     client = double('client')
     allow(Clients::Backstage::User).to receive(:new).and_return(client)
-    allow(client).to receive(:list).with('kaio@codelitt.com').and_return([BackstageUser.new({ 'id' => 123, 'email' => 'kaio@kaio.com' })])
-    allow(client).to receive(:list).with('kaiomagalhaes').and_return([BackstageUser.new({ 'id' => 123 })])
+    allow(client).to receive(:find_or_create_by).and_return([BackstageUser.new({ 'id' => 123, 'email' => 'kaio@kaio.com' })])
   end
 
   context 'Github JSON' do
