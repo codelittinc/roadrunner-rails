@@ -18,6 +18,17 @@ RailsAdmin.config do |config|
     end
   end
 
+  RailsAdmin.config FlowRequest do
+    show do
+      include_all_fields
+      field :json do
+        formatted_value do
+          bindings[:view].render partial: 'rails_admin/main/json_formatted', locals: { object: bindings[:object] }
+        end
+      end
+    end
+  end
+
   RailsAdmin.config User do
     list do
       include_fields :github, :azure_devops_issues, :slack, :azure, :jira, :id, :name
