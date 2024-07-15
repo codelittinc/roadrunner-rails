@@ -13,11 +13,7 @@ module Flows
 
             return unless @current_pull_request.persisted?
 
-            response = Clients::Notifications::Channel.new(customer).send(new_pull_request_message, channel, nil, true)
-            slack_message = SlackMessage.new(ts: response['notification_id'], pull_request: @current_pull_request)
-            slack_message.save!
-
-            Clients::Notifications::Reactji.new(customer).send(reaction, channel, slack_message.ts) if branch
+            @current_pull_request.notify_of_creation!(new_pull_request_message, channel, branch, customer, reaction)
 
             @current_pull_request&.update(ci_state: checkrun_state)
           end

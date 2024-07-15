@@ -49,16 +49,16 @@ module Tasks
     def self.send_pagerduty_notification(url, environment, description)
       pagerduty = Pagerduty.build(integration_key: INTEGRATION_KEY, api_version: 2)
       summary = "Server Down Alert: The Afinium #{environment} #{description} was triggered"
-      incident = pagerduty.trigger(
-        summary: summary,
+      pagerduty.trigger(
+        summary:,
         source: 'monitoring_script',
         severity: 'critical',
         custom_details: {
-          url: url,
+          url:,
           issue: 'Server is not responding to HTTP requests.'
         }
       )
-      Rails.logger.info { "Notification sent to PagerDuty." }
+      Rails.logger.info { 'Notification sent to PagerDuty.' }
     end
 
     def self.notification_recently_sent?(redis, notification_key)

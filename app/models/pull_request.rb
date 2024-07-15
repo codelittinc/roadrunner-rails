@@ -76,4 +76,12 @@ class PullRequest < ApplicationRecord
       transition open: :cancelled
     end
   end
+
+  def notify_of_creation!(new_pull_request_message, channel, branch, customer, reaction)
+    response = Clients::Notifications::Channel.new(customer).send(new_pull_request_message, channel, nil, true)
+    slack_message = SlackMessage.new(ts: response['notification_id'], pull_request: self)
+    slack_message.save!
+
+    Clients::Notifications::Reactji.new(customer).send(reaction, channel, slack_message.ts) if branch
+  end
 end
