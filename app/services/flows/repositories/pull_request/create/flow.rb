@@ -13,7 +13,7 @@ module Flows
 
             return unless @current_pull_request.persisted?
 
-            @current_pull_request.notify_of_creation!(channel, branch, customer, reaction) unless parser.draft
+            @current_pull_request.notify_of_creation!(channel, branch, customer, reaction) unless @current_pull_request.draft
 
             @current_pull_request&.update(ci_state: checkrun_state)
           end
@@ -55,7 +55,8 @@ module Flows
               title: parser.title,
               description: parser.description,
               repository:,
-              backstage_user_id:
+              backstage_user_id:,
+              draft: parser.draft
             )
 
             pr.source = parser.build_source(pr)

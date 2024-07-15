@@ -8,6 +8,7 @@
 #  base              :string
 #  ci_state          :string
 #  description       :string
+#  draft             :boolean          default(FALSE), not null
 #  head              :string
 #  merged_at         :datetime
 #  source_type       :string

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_13_194317) do
+ActiveRecord::Schema[7.0].define(version: 2024_07_15_161939) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -243,6 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_13_194317) do
     t.bigint "source_id"
     t.datetime "merged_at", precision: nil
     t.integer "backstage_user_id"
+    t.boolean "draft", default: false, null: false
     t.index ["repository_id"], name: "index_pull_requests_on_repository_id"
     t.index ["source_type", "source_id"], name: "index_pull_requests_on_source"
     t.index ["user_id"], name: "index_pull_requests_on_user_id"

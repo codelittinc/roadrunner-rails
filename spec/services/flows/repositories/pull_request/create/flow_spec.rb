@@ -97,6 +97,16 @@ RSpec.describe Flows::Repositories::PullRequest::Create::Flow, type: :service do
 
           expect { flow.run }.to change(PullRequest, :count).by(1)
         end
+
+        it 'it is a draft' do
+          repository
+          github_valid_json_draft = github_valid_json.deep_dup
+          github_valid_json_draft[:pull_request][:draft] = true
+          flow = described_class.new(github_valid_json_draft)
+
+          expect { flow.run }.to change(PullRequest, :count).by(1)
+          expect(PullRequest.last.draft).to be_truthy
+        end
       end
 
       context 'it does not create a pull request in the database when' do
