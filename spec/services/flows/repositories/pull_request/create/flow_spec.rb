@@ -41,6 +41,16 @@ RSpec.describe Flows::Repositories::PullRequest::Create::Flow, type: :service do
           flow = described_class.new(github_valid_json_confirmed)
           expect(flow.flow?).to be_truthy
         end
+
+        it 'when it is a draft' do
+          repository
+          github_valid_json_confirmed = github_valid_json.deep_dup
+          github_valid_json_confirmed[:number] = 1
+          github_valid_json_confirmed[:action] = 'ready_for_review'
+          github_valid_json_confirmed[:pull_request][:draft] = true
+          flow = described_class.new(github_valid_json_confirmed)
+          expect(flow.flow?).to be_truthy
+        end
       end
 
       context 'return false when' do
@@ -76,35 +86,65 @@ RSpec.describe Flows::Repositories::PullRequest::Create::Flow, type: :service do
     end
 
     describe '#execute' do
-      it 'creates a PullRequest in the database' do
-        repository
-        expect_any_instance_of(Clients::Notifications::Channel).to receive(:send).and_return({
-                                                                                               'notification_id' => '123'
-                                                                                             })
-        expect_any_instance_of(Clients::Notifications::Reactji).to receive(:send)
-        flow = described_class.new(github_valid_json)
+      context 'creates a pull request in the database when' do
+        it 'all the information is valid' do
+          repository
+          expect_any_instance_of(Clients::Notifications::Channel).to receive(:send).and_return({
+                                                                                                 'notification_id' => '123'
+                                                                                               })
+          expect_any_instance_of(Clients::Notifications::Reactji).to receive(:send)
+          flow = described_class.new(github_valid_json)
 
-        expect { flow.run }.to change(PullRequest, :count).by(1)
+          expect { flow.run }.to change(PullRequest, :count).by(1)
+        end
       end
 
-      context 'pull request already exists in database' do
-        it 'pull request already exists in database' do
+      context 'it does not create a pull request in the database when' do
+        it 'pull request already exists in the database' do
           FactoryBot.create(:pull_request, repository:, source_control_id: 160)
 
           flow = described_class.new(github_valid_json)
 
           expect { flow.run }.to change(PullRequest, :count).by(0)
         end
-      end
 
-      context 'there is a racing condition and two events are triggered together' do
-        it 'does not create more than one pull request' do
+        it 'there is a racing condition and two events are triggered together' do
           FactoryBot.create(:pull_request, repository:, source_control_id: 160)
 
           expect_any_instance_of(described_class).to receive(:pull_request_already_exists?).and_return(true)
           flow = described_class.new(github_valid_json)
 
           expect { flow.run }.to change(PullRequest, :count).by(0)
+        end
+      end
+
+      context 'it sends a notification about the pull request being created when' do
+        it 'the pull request is not a draft' do
+          repository
+          expect_any_instance_of(Clients::Notifications::Channel).to receive(:send).and_return({
+                                                                                                 'notification_id' => '123'
+                                                                                               })
+          expect_any_instance_of(Clients::Notifications::Reactji).to receive(:send)
+
+          github_valid_json_draft = github_valid_json.deep_dup
+          github_valid_json_draft[:pull_request][:draft] = false
+          flow = described_class.new(github_valid_json_draft)
+
+          expect { flow.run }.to change(PullRequest, :count).by(1)
+        end
+      end
+
+      context 'it does not send a notification about the pull request being created when' do
+        it 'the pull request is a draft' do
+          repository
+          expect_any_instance_of(Clients::Notifications::Channel).not_to receive(:send)
+          expect_any_instance_of(Clients::Notifications::Reactji).not_to receive(:send)
+
+          github_valid_json_draft = github_valid_json.deep_dup
+          github_valid_json_draft[:pull_request][:draft] = true
+          flow = described_class.new(github_valid_json_draft)
+
+          expect { flow.run }.to change(PullRequest, :count).by(1)
         end
       end
 

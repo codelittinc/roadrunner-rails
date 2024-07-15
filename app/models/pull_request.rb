@@ -77,7 +77,8 @@ class PullRequest < ApplicationRecord
     end
   end
 
-  def notify_of_creation!(new_pull_request_message, channel, branch, customer, reaction)
+  def notify_of_creation!(channel, branch, customer, reaction)
+    new_pull_request_message = Messages::PullRequestBuilder.new_pull_request_message(self)
     response = Clients::Notifications::Channel.new(customer).send(new_pull_request_message, channel, nil, true)
     slack_message = SlackMessage.new(ts: response['notification_id'], pull_request: self)
     slack_message.save!

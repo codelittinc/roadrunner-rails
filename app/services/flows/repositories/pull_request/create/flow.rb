@@ -13,7 +13,7 @@ module Flows
 
             return unless @current_pull_request.persisted?
 
-            @current_pull_request.notify_of_creation!(new_pull_request_message, channel, branch, customer, reaction)
+            @current_pull_request.notify_of_creation!(channel, branch, customer, reaction) unless parser.draft
 
             @current_pull_request&.update(ci_state: checkrun_state)
           end
@@ -23,8 +23,8 @@ module Flows
             return false unless pull_request.nil?
             return false unless parser.new_pull_request_flow?
 
-            !parser.draft && !repository.deployment_branches?(parser.base,
-                                                              parser.head) && repository.valid_base_branch_for_pull_request?(parser.base)
+            !repository.deployment_branches?(parser.base,
+                                             parser.head) && repository.valid_base_branch_for_pull_request?(parser.base)
           end
 
           private
@@ -61,10 +61,6 @@ module Flows
             pr.source = parser.build_source(pr)
             pr.save
             pr
-          end
-
-          def new_pull_request_message
-            Messages::PullRequestBuilder.new_pull_request_message(@current_pull_request)
           end
 
           def branch
