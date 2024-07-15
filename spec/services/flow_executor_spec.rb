@@ -40,7 +40,7 @@ RSpec.describe FlowExecutor, type: :service do
 
         allow_any_instance_of(Clients::Notifications::Direct).to receive(:send).and_raise(StandardError.new)
 
-        expect { described_class.call(flow_request) }.to raise_error
+        expect { described_class.call(flow_request) }.to raise_error(StandardError)
       end
     end
 
