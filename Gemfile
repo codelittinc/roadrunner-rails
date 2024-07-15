@@ -15,6 +15,7 @@ gem 'sprockets-rails'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
+gem 'faraday-retry'
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '~> 6.0'
@@ -37,7 +38,7 @@ gem 'notion-ruby-client'
 gem 'friendly_id', '~> 5.4.0'
 gem 'jbuilder'
 gem 'rack-cors'
-gem 'rails_admin', '>= 3.0.0.beta'
+gem 'rails_admin', '3.1.2'
 gem 'ransack'
 gem 'sidekiq'
 gem 'sidekiq-cron'
